@@ -1,11 +1,23 @@
 # app.py - HYBRID APPROACH
-from flask import Flask, render_template, request, jsonify
+import os
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from flask_cors import CORS
 import requests
 import time
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
+
+# Serve index.html
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+# Serve CSS directly
+@app.route('/style.css')
+def serve_css():
+    return app.send_static_file('style.css')
+
 
 OLLAMA_URL = "http://localhost:11434"
 
@@ -393,3 +405,4 @@ if __name__ == '__main__':
     print("📋 Rule-based for technical accuracy") 
     print("📍 Server running at: http://localhost:7860")
     app.run(debug=True, host='0.0.0.0', port=7860)
+
